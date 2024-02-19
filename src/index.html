@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- FAVICON LINK -->
+    <link rel="icon" href="https://www.svgrepo.com/show/303341/netflix-1-logo.svg">
+
+    <!-- MAIN CSS -->
+    <link rel="stylesheet" href="./style.css" />
+
+    <!-- Output css -->
+    <link rel="stylesheet" href="../dist/output.css">
+
+    <!-- BOOTSTRAP ICON -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <title>Netflix</title>
+</head>
+
+<body>
+    <!-- HEADER SECTION STARTED -->
+    <header class="bg-white border-b-2 fixed z-[99999] top-0 w-full">
+        <div class="container-fluid px-4">
+            <nav class="flex items-center justify-between">
+                <a href="#">
+                    <img src="https://images.ctfassets.net/y2ske730sjqp/6bhPChRFLRxc17sR8jgKbe/6fa1c6e6f37acdc97ff635cf16ba6fb3/Logos-Readability-Netflix-logo.png"
+                        alt="logo" class="w-[160px] hover:scale-[120%] duration-300"></a>
+                <form action="#">
+                    <input id="searchButton" type="search" placeholder="Enter movie name" class="w-[320px] rounded-md md:w-[520px] h-[50px] px-4
+                        border focus:outline-none duration-150 focus:ring-red-600 ring-2 ring-red-100">
+                </form>
+                <ul class="flex items-center gap-x-4">
+                    <li id="app">
+                        <button id="darkModeToggle"
+                            class="grid place-content-center hover:bg-black hover:text-white duration-500 p-4 border w-12 h-12 rounded-full">
+                            <i class="bi bi-moon-stars-fill"></i>
+                        </button>
+                    </li>
+                    <li>
+                        <a href="#"
+                            class="grid hover:bg-red-700 hover:text-white duration-500 text-red-700 place-content-center p-4 border w-12 h-12 rounded-full"><i
+                                class="bi bi-suit-heart-fill"></i>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <!-- HEADER SECTION ENDED -->
+
+    <!-- MAIN SECTION STARTED -->
+    <main class="flex py-[90px] min-h-screen">
+        <!-- ASIDE SECTION STARTED -->
+        <aside id="aside" class="border min-h-screen fixed p-4 top-[90px] bg-white w-[320px] shadow-lg">
+            <form action="#">
+                <label for="name" class="my-6 block">
+                    <p class="text-gray-500 mb-2">Enter film title:</p>
+                    <input id="name" type="search" placeholder="Enter film title.." class="w-full border-red-500 border rounded-md
+                            h-[40px] px-3 focus:outline-none duration-150 focus:ring-red-600 ring-2 ring- red-100" />
+                </label>
+                <label for="category" class="my-6 block">
+                    <p class="text-gray-500 mb-2">Select film category:</p>
+                    <select name="category" id="category" class="w-full border-red-500 border rounded-md h-[40px]
+                focus:outline-none duration-150 focus:ring-red-600 ring-2 ring-
+                red-100 px-4">
+                        <option disabled selected>Select film category</option>
+                        <!-- dynamic render -->
+                    </select>
+                </label>
+                <label for="rating" class="my-6 block">
+                    <p class="text-gray-500 mb-2">Select film rating:</p>
+                    <input id="name" type="number" max="10" min="1" placeholder="Enter film title..." class="w-full border-red-500 border rounded-md h-[40px]
+                        px-3 focus:outline-none duration-150 focus:ring-red-600 ring-2 ring-
+                        red-100" />
+                </label>
+                <button type="submit" class="p-3 ring-4 ring-transparent hover:ring-green-900
+                    duration-300 bg-green-600 w-full rounded-md text-white text-xl flex
+                    justify-center gap-x-4 items-center">
+                    <span>Search </span>
+                    <i class="bi bi-search"></i>
+                </button>
+            </form>
+        </aside>
+        <!-- ASIDE SECTION ENDED -->
+
+        <!-- SECTION-1 STARTED -->
+        <section id="movies" class="grow ml-[320px] p-8">
+            <div class="grid sm:grid-cols-2 grid-cols-1 md:grid-cols-4 movies gap-y-7"></div>
+            <!-- <div class="cardWrapper flex items-center justify-between gap-6 flex-wrap">
+
+            </div> -->
+
+            <!-- dynamic render -->
+            </div>
+        </section>
+        <!-- SECTION-1 ENDED -->
+
+    </main>
+    <!-- MAIN SECTION ENDED -->
+
+    <!-- FOOTER SECTION STARTED -->
+    <footer class="bg-red-500 h-[60px] border mt-[80px]">
+        <div class="container-fluid text-center text-white pt-4">
+            <p>2024 Netflix Movies</p>
+        </div>
+    </footer>
+    <!-- FOOTER SECTION ENDED -->
+</body>
+
+<!-- DATA BASE JS -->
+<script src="./db.js"></script>
+
+<!-- UTILS JS -->
+<script src="./utils/utils.js"></script>
+
+<!-- INDEX JS -->
+<script src="./index.js"></script>
+
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+
+</html>
