@@ -58,13 +58,15 @@ aside {
 }
 
 body.dark-mode {
-    background-color: #1a202c;
+    background-color: #000;
     color: #fff;
 }
 
 body.dark-mode header,
-body.dark-mode aside {
-    background-color: #1a202c;
-    color: #828181;
+body.dark-mode aside,
+body.dark-mode input,
+body.dark-mode select {
+    background-color: #000;
+    color: #a3a3a3;
     transition: background-color 0.3s, color 0.3s;
 }
