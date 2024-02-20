@@ -44,29 +44,117 @@
     align-items: center;
 }
 
-/* Dark mode styles */
-body {
-    background-color: #fff;
-    color: #000;
-    transition: background-color 0.3s, color 0.3s;
+
+/* Loader start */
+
+.loader {
+    width: 48px;
+    height: 48px;
+    border-width: 3px;
+    border-style: dashed solid solid dotted;
+    border-color: #FF3D00 #FF3D00 transparent #FF3D00;
+    border-radius: 50%;
+    display: inline-block;
+    position: relative;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+    margin: 120px auto;
+    position: relative;
+    left: 550px;
+    top: 200px;
 }
 
-header,
-aside {
-    background-color: #f0f0f0;
-    color: #333;
+.loader::after {
+    content: '';
+    box-sizing: border-box;
+    position: absolute;
+    left: 20px;
+    top: 31px;
+    border: 10px solid transparent;
+    border-right-color: #FF3D00;
+    transform: rotate(-40deg);
 }
 
-body.dark-mode {
-    background-color: #000;
+@keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Loader end */
+
+
+.not-found {
+    position: relative;
+    left: 550px;
+    top: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.dark-mode {
+    background: rgb(3, 4, 13) !important;
+    color: #fff !important;
+}
+
+/* Toaster*/
+
+.toast {
+    position: fixed;
+    z-index: 9999999;
+    width: 300px;
+    height: 60px;
+    border-radius: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: limegreen;
+    padding: 0 20px;
+    right: 10px;
+    top: 70px;
+    cursor: pointer;
+    transition: all 0.4s ease-in-out;
+}
+
+.toast .bi {
+    font-size: 24px;
+}
+
+.show {
+    transform: translateX(0);
+    animation-name: animeToast;
+    animation-iteration-count: 1;
+    animation-fill-mode: backwards;
+    animation-duration: 0.5s;
     color: #fff;
 }
 
-body.dark-mode header,
-body.dark-mode aside,
-body.dark-mode input,
-body.dark-mode select {
-    background-color: #000;
-    color: #a3a3a3;
-    transition: background-color 0.3s, color 0.3s;
+.hide {
+    transform: translateX(400%);
+}
+
+.toast:hover {
+    background: rgb(3, 4, 13) !important;
+    color: #fff !important;
+}
+
+@keyframes animeToast {
+    0% {
+        transform: translateX(100%);
+        background: rgb(6, 36, 0);
+        background: Linear-gradient(14deg, rgba(6, 36, 0, 1) 0%, rgba (9, 121, 23, 1) 41%, rgba(0, 255, 61, 1) 100%);
+    }
+
+    100% {
+        transform: translateX(0%);
+        background: rgb(6, 36, 0);
+        background: Linear-gradient(354deg, rgba(6, 36, 0, 1) 0%, rgba(9, 121, 49, 1) 41%, rgba(0, 255, 61, 1) 100%);
+    }
+
 }

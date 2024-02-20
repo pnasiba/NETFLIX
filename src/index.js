@@ -4,8 +4,23 @@ movies.splice(100);
 // --------------------------------- HTML elements ----------------------------
 const categoryOption = $("#category");
 const moviesWrapper = $(".movies");
-const searchBtn = $("#searchButton");
+const searchInput = $("#search");
+const resultCount = $("#search-result");
+const body = $("body");
+const header = $("header");
+const aside = $("aside");
+const footer = $("footer");
+const input = $$("input");
+const select = $("select");
 
+const darkModeBtn = $(".dark-btn");
+
+let formFilter = $("#filter-form");
+let searchName = $("#name");
+let filmRating = $("#number");
+
+let toastElement = $(".toast");
+let toastMessage = $(".toast-text");
 // --------------------------------- NORMALIZE DATA ----------------------------
 
 const allMovies = movies.map((el) => {
@@ -46,6 +61,9 @@ getCategory(allMovies);
 
 function render(data) {
   if (data.length) {
+    // const option = createElement("option", "", 'select film category');
+    // categoryOption.appendChild(option);
+
     data.sort().forEach((el) => {
       const option = createElement("option", "", el);
       categoryOption.appendChild(option);
@@ -80,8 +98,10 @@ function renderMovies(moviesList) {
                    
                     <button 
                         data-like=${el.id}
-                        class="grid hover:bg-red-700 hover:text-white duration-500 text-red-700 place-content-center p-4 border w-12 h-12 rounded-full">
-                        <i class="bi bi-suit-heart-fill "></i>
+                        class="grid like hover:bg-red-700 hover:text-white duration-500 text-red-700 place-content-center p-4 border w-12 h-12 rounded-full">
+                        <i class="data-like=${
+                          el.id
+                        } bi bi-suit-heart-fill like"></i>
                     </button>
 
                     <a href="${
@@ -103,25 +123,158 @@ renderMovies(allMovies);
 
 // ------------------------------ Searching movies------------------------
 
-searchBtn.addEventListener("keyup", (e) => {
-  moviesWrapper.innerHTML = "";
-  searchMovies(e.target.value);
-});
-
-function searchMovies(search) {
-  const searchResult = movies.filter(
+function searchMovies(searchTerm) {
+  const searchResult = allMovies.filter(
     // title bo'yicha qidirish
-    (el) => el.title.toLowerCase().includes(search.toLowerCase())
+    (el) => el.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
-//   console.log(searchResult.map((el) => el.minImage));
-  renderMovies(searchResult);
+
+  if (searchResult.length) {
+    moviesWrapper.innerHTML = "";
+    resultCount.innerHTML = `Result: ${searchResult.length} movies`;
+    renderMovies(searchResult);
+  } else {
+    resultCount.innerHTML = "";
+    moviesWrapper.innerHTML = `<div class='not-found'>
+  <h1 class='text-red-600 text-center font-bold text-3xl'>No result found</h1>
+  <a href='./index.html' class='px-[12px] py-[12px] bg-green-600 text-white rounded-lg my-4'>Home</a>
+  </div>`;
+  }
 }
+
+searchInput.addEventListener("keyup", (e) => {
+  if (e.keyCode == 13) {
+    moviesWrapper.innerHTML = "<span class='loader'></span>";
+
+    setTimeout(() => {
+      searchMovies(e.target.value);
+    }, 2000);
+  }
+});
 
 // --------------------------------- Dark Mode -----------------------------
 
-const body = document.body;
-const darkModeToggle = document.getElementById("darkModeToggle");
-
-darkModeToggle.addEventListener("click", () => {
+function darkMode() {
   body.classList.toggle("dark-mode");
+  header.classList.toggle("dark-mode");
+  aside.classList.toggle("dark-mode");
+  footer.classList.toggle("dark-mode");
+
+  input.forEach((el) => {
+    el.classList.toggle("dark-mode");
+  });
+
+  select.classList.toggle("dark-mode");
+
+  if (body.classList.contains("dark-mode")) {
+    darkModeBtn.innerHTML = ' <i class = "bi bi-sun text-xl"></i>';
+    localStorage.setItem("dark-mode", true);
+  } else {
+    localStorage.setItem("dark-mode", false);
+    darkModeBtn.innerHTML = '<i class="bi bi-moon-stars-fill"></i>';
+  }
+}
+
+darkModeBtn.addEventListener("click", () => {
+  darkMode();
 });
+
+// ----------------- Refresh paytidagi dark mode ---------------------
+
+function dark() {
+  let isDark = localStorage.getItem("dark-mode");
+
+  if (isDark == "true") {
+    body.classList.add("dark-mode");
+    header.classList.add("dark-mode");
+    aside.classList.add("dark-mode");
+    footer.classList.add("dark-mode");
+
+    input.forEach((el) => {
+      el.classList.add("dark-mode");
+    });
+
+    select.classList.add("dark-mode");
+    darkModeBtn.innerHTML = ' <i class = "bi bi-sun text-xl"></i>';
+  } else {
+    body.classList.remove("dark-mode");
+    header.classList.remove("dark-mode");
+    aside.classList.remove("dark-mode");
+    footer.classList.remove("dark-mode");
+
+    input.forEach((el) => {
+      el.classList.remove("dark-mode");
+    });
+
+    select.classList.remove("dark-mode");
+    darkModeBtn.innerHTML = '<i class="bi bi-moon-stars-fill"></i>';
+  }
+}
+
+dark();
+
+// -------------------- Multi Search function -----------------------
+
+function multiSearch() {
+  let name = searchName.value;
+  let rating = filmRating.value;
+  let category = categoryOption.value;
+
+  const searchResult = allMovies.filter((el) => {
+    return (
+      el.title.toLowerCase().includes(name.toLowerCase()) &&
+      el.category.includes(category) &&
+      el.rating >= rating
+    );
+  });
+
+  if (searchResult.length) {
+    moviesWrapper.innerHTML = "";
+    resultCount.innerHTML = `Result: ${searchResult.length} movies`;
+    renderMovies(searchResult);
+  } else {
+    resultCount.innerHTML = "";
+    moviesWrapper.innerHTML = `<div class='not-found'>
+  <h1 class='text-red-600 text-center font-bold text-3xl'>No result found</h1>
+  <a href='./index.html' class='px-[12px] py-[12px] bg-green-600 text-white rounded-lg my-4'>Home</a>
+  </div>`;
+  }
+}
+
+formFilter.addEventListener("submit", (e) => {
+  e.preventDefault();
+  moviesWrapper.innerHTML = "<span class='loader'></span>";
+
+  setTimeout(() => {
+    multiSearch();
+  }, 2000);
+});
+
+// ----------------------add to wishlist --------------------------
+
+moviesWrapper.addEventListener("click", (e) => {
+  if (e.target.classList.contains("like")) {
+    let id = e.target.getAttribute("data-like");
+    console.log(id);
+    let titleFilm = allMovies.filter(movie => movie.id === id)[0].title;
+    toast(
+      "success",
+      `${
+        titleFilm.length > 6 ? titleFilm.substring(0, 16) + "..." : titleFilm
+      } film added`,
+      2000
+    );
+  }
+});
+
+function toast(type, message, timeout) {
+  toastMessage.innerHTML = message;
+  if (type === "success") {
+    toastElement.classList.remove("hide");
+    toastElement.classList.add("show");
+    setTimeout(() => {
+      toastElement.classList.remove("show");
+      toastElement.classList.add("hide");
+    }, timeout);
+  }
+}

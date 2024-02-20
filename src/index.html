@@ -21,6 +21,17 @@
 </head>
 
 <body>
+
+    <div class="toast hide">
+        <span class="toast-icon">
+            <i class="bi bi-check2-all"></i>
+        </span>
+        <span class="toast-text">
+            this is toast
+        </span>
+    </div>
+
+
     <!-- HEADER SECTION STARTED -->
     <header class="bg-white border-b-2 fixed z-[99999] top-0 w-full">
         <div class="container-fluid px-4">
@@ -29,13 +40,14 @@
                     <img src="https://images.ctfassets.net/y2ske730sjqp/6bhPChRFLRxc17sR8jgKbe/6fa1c6e6f37acdc97ff635cf16ba6fb3/Logos-Readability-Netflix-logo.png"
                         alt="logo" class="w-[160px] hover:scale-[120%] duration-300"></a>
                 <form action="#">
-                    <input id="searchButton" type="search" placeholder="Enter movie name" class="w-[320px] rounded-md md:w-[520px] h-[50px] px-4
+
+                    <input id="search" type="search" placeholder="Enter movie name" class="w-[320px] rounded-md md:w-[520px] h-[50px] px-4
                         border focus:outline-none duration-150 focus:ring-red-600 ring-2 ring-red-100">
                 </form>
                 <ul class="flex items-center gap-x-4">
                     <li id="app">
                         <button id="darkModeToggle"
-                            class="grid place-content-center hover:bg-black hover:text-white duration-500 p-4 border w-12 h-12 rounded-full">
+                            class="dark-btn grid place-content-center hover:bg-black hover:text-white duration-500 p-4 border w-12 h-12 rounded-full">
                             <i class="bi bi-moon-stars-fill"></i>
                         </button>
                     </li>
@@ -54,8 +66,10 @@
     <!-- MAIN SECTION STARTED -->
     <main class="flex py-[90px] min-h-screen">
         <!-- ASIDE SECTION STARTED -->
-        <aside id="aside" class="border min-h-screen fixed p-4 top-[90px] bg-white w-[320px] shadow-lg">
-            <form action="#">
+        <aside class="border min-h-screen fixed p-4 top-[90px] bg-white w-[320px] shadow-lg">
+
+            <form action="#" id="filter-form">
+
                 <label for="name" class="my-6 block">
                     <p class="text-gray-500 mb-2">Enter film title:</p>
                     <input id="name" type="search" placeholder="Enter film title.." class="w-full border-red-500 border rounded-md
@@ -66,13 +80,13 @@
                     <select name="category" id="category" class="w-full border-red-500 border rounded-md h-[40px]
                 focus:outline-none duration-150 focus:ring-red-600 ring-2 ring-
                 red-100 px-4">
-                        <option disabled selected>Select film category</option>
+                        <option disabled selected value="">Select film category</option>
                         <!-- dynamic render -->
                     </select>
                 </label>
                 <label for="rating" class="my-6 block">
                     <p class="text-gray-500 mb-2">Select film rating:</p>
-                    <input id="name" type="number" max="10" min="1" placeholder="Enter film title..." class="w-full border-red-500 border rounded-md h-[40px]
+                    <input id="number" type="number" max="10" min="1" placeholder="Enter film title..." class="w-full border-red-500 border rounded-md h-[40px]
                         px-3 focus:outline-none duration-150 focus:ring-red-600 ring-2 ring-
                         red-100" />
                 </label>
@@ -88,6 +102,9 @@
 
         <!-- SECTION-1 STARTED -->
         <section id="movies" class="grow ml-[320px] p-8">
+
+            <h1 id="search-result" class="text-3xl font-bold text-red-600 my-8"></h1>
+
             <div class="grid sm:grid-cols-2 grid-cols-1 md:grid-cols-4 movies gap-y-7"></div>
             <!-- <div class="cardWrapper flex items-center justify-between gap-6 flex-wrap">
 
@@ -104,7 +121,7 @@
     <!-- FOOTER SECTION STARTED -->
     <footer class="bg-red-500 h-[60px] border mt-[80px]">
         <div class="container-fluid text-center text-white pt-4">
-            <p>2024 Netflix Movies</p>
+            <p class="text-xl">2024 Netflix Movies</p>
         </div>
     </footer>
     <!-- FOOTER SECTION ENDED -->
