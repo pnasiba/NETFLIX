@@ -85,7 +85,7 @@ function renderMovies(moviesList) {
             <div class="card-body h-[310px]">
                 <h2>${
                   el.title.length > 26
-                    ? el.title.substring(0, 23) + "..."
+                    ? el.title.substring(0, 20) + "..."
                     : el.title
                 }</h2>
                 <ul>
