@@ -1,10 +1,39 @@
-**Datalar o'zimizga moslashish uchun normalize qilinadi. 'movies' ichidagi objectlar bor shularni o'zimizga moshlashtiramiz. Ya'ni (el.title, el.year, el.categories, el.imdbId, el.imdbRating, el.runtime, el.language, el.youtubeId, el.summary, el.smallThumbnail, va el.bigThumbnail) valuelar 'movies' ichidegi property bilan bir-biriga ulanadi. Shunda (el.title) value 'movies' ichidagi title(property) ga teng.**
+"use strict";
+movies.splice(100);
 
-```
-// ------------------- NORMALIZE DATA -------------------------
+// --------------------------------- HTML elements ----------------------------
+const categoryOption = $("#category");
+const moviesWrapper = $(".wishlist");
+const searchInput = $("#search");
+const resultCount = $("#search-result");
+const body = $("body");
+const header = $("header");
+const aside = $("aside");
+const footer = $("footer");
+const input = $$("input");
+const select = $("select");
+
+const darkModeBtn = $(".dark-btn");
+
+let formFilter = $("#filter-form");
+let searchName = $("#name");
+let filmRating = $("#number");
+
+let toastElement = $(".toast");
+let toastMessage = $(".toast-text");
+
+// --------------------------------- GLOBAL VARIABLES ----------------------------
+
+let wishlists = JSON.parse(localStorage.getItem("movies"));
+
+
+
+
+
+
+// --------------------------------- NORMALIZE DATA ----------------------------
 
 const allMovies = movies.map((el) => {
-
   return {
     title: el.title,
     year: el.year,
@@ -18,17 +47,8 @@ const allMovies = movies.map((el) => {
     minImage: el.smallThumbnail,
     maxImage: el.bigThumbnail,
   };
-
 });
-```
 
-
-<br><br>
-
-
-**category nomli bo'sh arr yaratiladi.Agar moviesList ro'yxati bo'sh bo'lmasa (moviesList.length haqiqiy (truthy) qiymatga ega bo'lsa), har bir kino obyektining category xususiyatidagi (kategoriya nomlaridagi) har bir elementni tekshirib chiqadi.Agar category ro'yxati ichida element qiymati mavjud bo'lmagan bo'lsa (!category.includes(e) shartiga binoan), category ro'yxatiga element qiymatini qo'shadi. render funksiyasi chaqiriladi va category parametr sifatida uzatiladi. getCategory(allMovies) qatorda esa, allMovies ro'yxatini funksiyaga uzatish orqali, barcha kategoriyalarni olish va render funksiyasiga uzatishni bajaradi.**
-
-```
 function getCategory(moviesList) {
   let category = [];
 
@@ -47,21 +67,13 @@ function getCategory(moviesList) {
 
 getCategory(allMovies);
 
-```
-
-<br><br>
-
-### Bu funksiya berilgan ma'lumotlar (data ro'yxati) bo'yicha categoriyalarni sahifada chiqarish uchun ishlatiladi.
-
-**Funksiya data ro'yxatida kategoriyalarni olishi va categoryOption(htmlda id orqali tanlab olingan element) bir elementga (createElement funksiyasi orqali yaratilgan) kategoriyalarni chiqarish uchun ishlatiladi. Agar data ro'yxati bo'sh bo'lmasa, sort metodi bilan ro'yxatni tartiblab, forEach yordamida har bir kategoriya uchun option elementini yaratadi va categoryOption elementiga qo'shadi.**
-
-
-```
-// ----------------------RENDER CATEGORIES ------------------------
+// -----------------------------RENDER CATEGORIES ---------------------------
 
 function render(data) {
   if (data.length) {
-    
+    // const option = createElement("option", "", 'select film category');
+    // categoryOption.appendChild(option);
+
     data.sort().forEach((el) => {
       const option = createElement("option", "", el);
       categoryOption.appendChild(option);
@@ -69,16 +81,6 @@ function render(data) {
   }
 }
 
-```
-
-<br><br>
-
-
-### Bu funksiya berilgan moviesList ro'yxati bo'yicha kinolar ro'yxatini sahifada chiqarish uchun ishlatiladi.
-**'moviesList' ro'yxatidagi har bir kino uchun card nomli HTML elementini yaratadi va uni sahifadagi 'moviesWrapper' nomli elementga qo'shadi. Har bir card elementi kinoning rasmini, sarlavhasini, chiqish yilini, kategoriyalarini, reytingini, va tilini ko'rsatadi va har bir kino uchun "like" tugmasi va "filmni ko'rish" havolasi qo'shilgan.**
-
-
-```
 // ------------------------------ Render Movies ----------------------
 function renderMovies(moviesList) {
   if (moviesList.length) {
@@ -105,11 +107,11 @@ function renderMovies(moviesList) {
                 <div class="flex btn-wrappeer items-center gap-x-3">
                    
                     <button 
-                        data-like=${el.id}
-                        class="grid like hover:bg-red-700 hover:text-white duration-500 text-red-700 place-content-center p-4 border w-12 h-12 rounded-full">
-                        <i class="data-like=${
+                        data-del=${el.id}
+                        class="grid del hover:bg-red-700 hover:text-white duration-500 text-red-700 place-content-center p-4 border w-12 h-12 rounded-full">
+                        <i class="data-del=${
                           el.id
-                        } bi bi-suit-heart-fill like"></i>
+                        } bi bi-trash-fill del"></i>
                     </button>
 
                     <a href="${
@@ -127,24 +129,8 @@ function renderMovies(moviesList) {
   }
 }
 
-renderMovies(allMovies);
 
-```
-
-
-
-
-<br><br>
-
-
-
-### Bu funksiya foydalanuvchi tomonidan kiritilgan so'rovnoma (searchTerm) bo'yicha kinolarni qidirish uchun ishlatiladi
-
-**Berilgan 'searchTerm' so'rovnoma bo'yicha 'allMovies' ro'yxatidan (filter metodi yordamida) qidiruv natijalarini (searchResult ro'yxati) olib chiqaradi.Agar qidiruv natijalari (searchResult.length) mavjud bo'lsa, 'moviesWrapper' elementini tozalab, topilgan kinolar sonini ko'rsatuvchi 'resultCount' elementiga natijalarni ko'rsatadi va 'renderMovies' funksiyasini chaqiradi.Aks holda, 'resultCount' elementini tozalab va "Natija topilmadi" xabarni chiqaradi.Qidirish oynasida Enter tugmasi bosilganda (keyup hodisasi), qidirishni boshlash uchun 'loader' animatsiyasini chiqaradi va qidirishni bajarish uchun 'searchMovies' funksiyasini chaqiradi.**
-
-
-```
-// ----------------------- Searching movies------------------------
+// ------------------------------ Searching movies------------------------
 
 function searchMovies(searchTerm) {
   const searchResult = allMovies.filter(
@@ -160,12 +146,10 @@ function searchMovies(searchTerm) {
     resultCount.innerHTML = "";
     moviesWrapper.innerHTML = `<div class='not-found'>
   <h1 class='text-red-600 text-center font-bold text-3xl'>No result found</h1>
-  <a href='./index.html' class='px-[12px] py-[12px] bg-green-600 text-white rounded-lg my-4'>Home</a>
+  <a href='./movies.html' class='px-[12px] py-[12px] bg-green-600 text-white rounded-lg my-4'>Home</a>
   </div>`;
   }
 }
-
-
 
 searchInput.addEventListener("keyup", (e) => {
   if (e.keyCode == 13) {
@@ -176,19 +160,8 @@ searchInput.addEventListener("keyup", (e) => {
     }, 2000);
   }
 });
-```
 
-
-
-
-<br><br>
-
-
-### Bu funksiya sahifada "dark mode"ni yoqish yoki o'chirish uchun ishlatiladi. "Dark mode" ni yoqish uchun body, header, aside, footer, va boshqa elementlarga dark-mode klassini qo'shadi yoki o'chiradi. "dark mode" ni saqlab qo'yish uchun localStorage dan foydalaniladi.
-
-
-```
-// --------------------- Dark Mode -----------------------
+// --------------------------------- Dark Mode -----------------------------
 
 function darkMode() {
   body.classList.toggle("dark-mode");
@@ -214,18 +187,7 @@ function darkMode() {
 darkModeBtn.addEventListener("click", () => {
   darkMode();
 });
-```
 
-
-<br><br>
-
-
-### Bu funksiya sayt yangilanganida(refresh bo'lganida) "dark mode"ni saqlangan holatini qaytaradi.
-
-**'localStorage' dan "dark-mode" qiymatini olib, agar qiymat "true" bo'lsa, sahifadagi kerakli elementlarga "dark-mode" klassini qo'shadi va "dark-mode" tugmasini "🌞" belgisi bilan o'zgartiradi, aks holda klasslarni o'chiradi va tugmani "🌙" belgisi bilan o'zgartiradi.**
-
-
-```
 // ----------------- Refresh paytidagi dark mode ---------------------
 
 function dark() {
@@ -259,20 +221,10 @@ function dark() {
 }
 
 dark();
-```
 
-<br><br>
-
-
-### Foydalanuvchi tomonidan kiritilgan parametrlar (name, rating, category) bo'yicha kinolar ro'yxatini qidiradi va natijalarni sahifada chiqaradi.
-
-**Bu funksiya 'searchName', 'filmRating', va 'categoryOption' elementlaridan qiymatlarni oladi va 'allMovies' ro'yxatidan foydalanib, kiritilgan qiymatlarga mos keladigan kinolarni qidiradi. Qidiruv natijalarini sahifada chiqarish uchun 'renderMovies' funksiyasidan foydalaniladi. Qidiruv natijasi bo'sh bo'lsa "Natija topilmadi" degan xabarni chiqaradi. 'formFilter' elementi submit bo'lib yuborilganda (submit hodisasi), qidirishni boshlash uchun loader animatsiyasini chiqaradi va qidirishni bajarish uchun 'multiSearch' funksiyasini chaqiradi.**
-
-```
 // -------------------- Multi Search function -----------------------
 
 function multiSearch() {
-
   let name = searchName.value;
   let rating = filmRating.value;
   let category = categoryOption.value;
@@ -293,11 +245,10 @@ function multiSearch() {
     resultCount.innerHTML = "";
     moviesWrapper.innerHTML = `<div class='not-found'>
   <h1 class='text-red-600 text-center font-bold text-3xl'>No result found</h1>
-  <a href='./index.html' class='px-[12px] py-[12px] bg-green-600 text-white rounded-lg my-4'>Home</a>
+  <a href='./movies.html' class='px-[12px] py-[12px] bg-green-600 text-white rounded-lg my-4'>Home</a>
   </div>`;
   }
 }
-
 
 formFilter.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -307,22 +258,13 @@ formFilter.addEventListener("submit", (e) => {
     multiSearch();
   }, 2000);
 });
-```
 
-
-<br><br>
-
-
-
-
-```
 // ----------------------add to wishlist --------------------------
 
 moviesWrapper.addEventListener("click", (e) => {
   if (e.target.classList.contains("like")) {
     let id = e.target.getAttribute("data-like");
     let film = allMovies.filter((movie) => movie.id === id)[0];
-
 
     toast(
       "success",
@@ -333,50 +275,34 @@ moviesWrapper.addEventListener("click", (e) => {
     );
 
     saveToLocalStorage(film.id);
-
   }
 });
 
-
 function toast(type, message, timeout) {
   toastMessage.innerHTML = message;
-
   if (type === "success") {
     toastElement.classList.remove("hide");
     toastElement.classList.add("show");
-
     setTimeout(() => {
       toastElement.classList.remove("show");
       toastElement.classList.add("hide");
     }, timeout);
-
-  } 
-  else if (type === "error") {
+  } else if (type === "error") {
     toastElement.classList.remove("hide");
     toastElement.classList.add("show-error");
-
     setTimeout(() => {
       toastElement.classList.remove("show-error");
       toastElement.classList.add("hide");
     }, timeout);
   }
 }
-```
 
-<br><br>
-
-
-
-### 'saveToLocalStorage' funksiyasi 'movieID' ni qabul qilib, agar 'movieID' mavjud bo'lsa, wishlist ro'yxatida bu 'movieID' mavjudligini tekshiradi. Agar wishlist ro'yxati ichida 'movieID' mavjud bo'lmasa, wishlist ro'yxatiga 'movieID' ni qo'shadi va yangilangan wishlist ro'yxatini 'localStorage' ga saqlab qo'yadi.
-
-```
-// ------------------Save to local storage----------------------
+// -----------------------Save to local storage----------------------------
 
 let wishlist = JSON.parse(localStorage.getItem("movies")) || [];
 
 function saveToLocalStorage(movieID) {
   if (movieID) {
-
     if (wishlist.includes(movieID)) {
       wishlist.push(movieID);
       localStorage.setItem("movies", JSON.stringify(wishlist));
@@ -385,4 +311,14 @@ function saveToLocalStorage(movieID) {
     }
   }
 }
-```
+
+
+// -------------------Get wishlist movies -------------------
+
+function getWishlist(){
+    let result = allMovies.filter((el)=> JSON.parse(localStorage.getItem('movies')).includes(el.id))
+
+    renderMovies(result)
+}
+
+getWishlist()

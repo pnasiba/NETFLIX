@@ -21,6 +21,9 @@ let filmRating = $("#number");
 
 let toastElement = $(".toast");
 let toastMessage = $(".toast-text");
+
+
+
 // --------------------------------- NORMALIZE DATA ----------------------------
 
 const allMovies = movies.map((el) => {
@@ -61,9 +64,7 @@ getCategory(allMovies);
 
 function render(data) {
   if (data.length) {
-    // const option = createElement("option", "", 'select film category');
-    // categoryOption.appendChild(option);
-
+    
     data.sort().forEach((el) => {
       const option = createElement("option", "", el);
       categoryOption.appendChild(option);
@@ -255,26 +256,58 @@ formFilter.addEventListener("submit", (e) => {
 moviesWrapper.addEventListener("click", (e) => {
   if (e.target.classList.contains("like")) {
     let id = e.target.getAttribute("data-like");
-    console.log(id);
-    let titleFilm = allMovies.filter(movie => movie.id === id)[0].title;
+    let film = allMovies.filter((movie) => movie.id === id)[0];
+
+
     toast(
       "success",
       `${
-        titleFilm.length > 6 ? titleFilm.substring(0, 16) + "..." : titleFilm
+        film.title.length > 6 ? film.title.substring(0, 16) + "..." : film.title
       } film added`,
       2000
     );
+
+    saveToLocalStorage(film.id);
+
   }
 });
 
 function toast(type, message, timeout) {
   toastMessage.innerHTML = message;
+
   if (type === "success") {
     toastElement.classList.remove("hide");
     toastElement.classList.add("show");
+
     setTimeout(() => {
       toastElement.classList.remove("show");
       toastElement.classList.add("hide");
     }, timeout);
+
+  } 
+  else if (type === "error") {
+    toastElement.classList.remove("hide");
+    toastElement.classList.add("show-error");
+
+    setTimeout(() => {
+      toastElement.classList.remove("show-error");
+      toastElement.classList.add("hide");
+    }, timeout);
+  }
+}
+
+// -----------------------Save to local storage----------------------------
+
+let wishlist = JSON.parse(localStorage.getItem("movies")) || [];
+
+function saveToLocalStorage(movieID) {
+  if (movieID) {
+
+    if (wishlist.includes(movieID)) {
+      wishlist.push(movieID);
+      localStorage.setItem("movies", JSON.stringify(wishlist));
+    } else {
+      toast("error", "Movie already in wishlist", 2000);
+    }
   }
 }

@@ -114,7 +114,6 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: limegreen;
     padding: 0 20px;
     right: 10px;
     top: 70px;
@@ -133,6 +132,17 @@
     animation-fill-mode: backwards;
     animation-duration: 0.5s;
     color: #fff;
+    background-color: limegreen;
+}
+
+.show-error {
+    transform: translateX(0);
+    animation-name: animeToastError;
+    animation-iteration-count: 1;
+    animation-fill-mode: backwards;
+    animation-duration: 0.5s;
+    color: #fff;
+    background-color: rgb(230, 33, 73);
 }
 
 .hide {
@@ -155,6 +165,21 @@
         transform: translateX(0%);
         background: rgb(6, 36, 0);
         background: Linear-gradient(354deg, rgba(6, 36, 0, 1) 0%, rgba(9, 121, 49, 1) 41%, rgba(0, 255, 61, 1) 100%);
+    }
+
+}
+
+@keyframes animeToastError {
+    0% {
+        transform: translateX(100%);
+        background: rgb(6, 36, 0);
+        background: Linear-gradient(14deg, rgba(6, 36, 0, 1) 0%, rgb(121, 9, 106) 41%, rgb(255, 0, 0) 100%);
+    }
+
+    100% {
+        transform: translateX(0%);
+        background: rgb(6, 36, 0);
+        background: Linear-gradient(354deg, rgba(6, 36, 0, 1) 0%, rgb(121, 9, 106) 41%, rgb(255, 0, 0) 100%);
     }
 
 }
